@@ -14,11 +14,11 @@ fn read_csv() -> Result<Vec<BTreeMap<String, String>>, Box<dyn Error>> {
 
     for result in rdr.deserialize() {
         let row: BTreeMap<String, String> = result?;
-        println!("row: {:?}", &row);
+        eprintln!("row: {:?}", &row);
         entries.push(row);
     }
 
-    println!("data: {:?}", &entries);
+    eprintln!("data: {:?}", &entries);
 
     Ok(entries)
 }
