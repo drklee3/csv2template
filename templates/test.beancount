@@ -1,0 +1,8 @@
+{% for row in data -%}
+    {%- set amount_arr = row.amount | split(pat=".") -%}
+    {%- set amount = [amount_arr.0 | trim_start_matches(pat="-"), amount_arr.1 | truncate(length=2, end="")] | join(sep=".") -%}
+
+    {{row.date | date(format="%Y-%m-%d")}} * "{{row.destination_name}}" "{{row.description}}"
+    {{row.source_type | convertcase(type="camel")}}:{{row.source_name | convertcase(type="camel")}}       -{{amount}} {{row.currency_code}}
+    {{row.destination_type | convertcase(type="camel")}}:{{row.category | convertcase(type="camel")}}     {{amount}} {{row.currency_code}}
+{% endfor %}
