@@ -14,16 +14,18 @@ fn read_csv() -> Result<Vec<BTreeMap<String, String>>, Box<dyn Error>> {
 
     for result in rdr.deserialize() {
         let row: BTreeMap<String, String> = result?;
-        eprintln!("row: {:?}", &row);
+        log::debug!("row: {:?}", &row);
         entries.push(row);
     }
 
-    eprintln!("data: {:?}", &entries);
+    log::debug!("data: {:?}", &entries);
 
     Ok(entries)
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
+    env_logger::init();
+
     let data = read_csv()?;
 
     let mut context = Context::new();
