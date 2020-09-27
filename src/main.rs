@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     templates.register_filter("convertcase", filters::convert_case);
 
-    let rendered = templates.render("test.beancount", &context)?;
+    let rendered = templates.render("beancount.template", &context)?;
 
     println!("{}", rendered);
 
