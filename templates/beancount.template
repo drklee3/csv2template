@@ -2,12 +2,24 @@
     {%- set amount_arr = row.amount | split(pat=".") -%}
     {%- set amount = [amount_arr.0 | trim_start_matches(pat="-"), amount_arr.1 | truncate(length=2, end="")] | join(sep=".") -%}
 
-    {{row.date | date(format="%Y-%m-%d")}} * "{{row.destination_name}}" "{{row.description | replace(from='"', to="'")}}" {{""}}
+    {{row.date | date(format="%Y-%m-%d")}} * {{""}}
+        {%- if row.type != "Transfer" and row.type != "Opening balance" -%}
+            "{{row.destination_name ~ '" '}}
+        {%- endif -%}
+        "{{row.description | replace(from='"', to="'")}}" {{""}}
     {%- for tag in row.tags | split(pat=",") -%}
         {%- if tag -%}
             #{{ tag | slugify}}
         {%- endif -%}
     {%- endfor %}
     {{row.source_type | convertcase(type="camel")}}:{{row.source_name | convertcase(type="camel")}}       -{{amount}} {{row.currency_code}}
-    {{row.destination_type | convertcase(type="camel")}}:{{row.category | convertcase(type="camel")}}     {{amount}} {{row.currency_code}}
+    {{row.destination_type | convertcase(type="camel")}}:
+    {%- if row.category -%}
+        {{row.category | convertcase(type="camel")}}
+    {%- else -%}
+        {{row.destination_name | slugify | convertcase(type="camel")}}
+    {%-endif -%}
+
+    {{" "}} {{amount}} {{row.currency_code}}
+
 {% endfor %}
